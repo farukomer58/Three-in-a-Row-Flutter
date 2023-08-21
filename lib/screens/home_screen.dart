@@ -4,7 +4,7 @@ import 'package:three_in_a_row/screens/game_screen.dart';
 class HomeScreen extends StatelessWidget {
   static const routeName = "/home";
 
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,38 +12,38 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            color: Colors.red,
-            child: const Padding(
-              padding: EdgeInsets.only(top: 100.0),
-              // Adjust the top padding as needed
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  "Three-in-a-Row", // Your custom title
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+          const Padding(
+            padding: EdgeInsets.only(top: 100.0),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Text(
+                "Three-in-a-Row",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
           Expanded(
-            child: Container(
-              color: Colors.blue,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    child: const Text("Start Game"),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, GameScreen.routeName);
-                    },
-                  ),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, GameScreen.routeName);
+                  },
+                  child: const Text("Start Game"),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text("Copyright © ${DateTime.now().year} by Omer Citik"),
             ),
           ),
         ],

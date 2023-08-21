@@ -16,21 +16,23 @@ class _GameScreenState extends State<GameScreen> {
   late String playerTurn; // Current player's turn
   var gameBoard = List<String>.generate(9, (index) => '',
       growable: false); // Represents the game board
+  late bool gameOver;
 
   @override
   void initState() {
     super.initState();
     // Randomly determine the starting player
     playerTurn = (Random().nextInt(2) == 0) ? "X" : "O";
+    gameOver = false;
   }
 
-  // Show a dialog to indicate game result and options
-  void showFinalDialog(context) {
+// Show a dialog to indicate game result and options
+  void showFinalDialog(context, String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("GAME FINISHED"),
-        content: Text("THE WINNER IS PLAYER: $playerTurn"),
+        title: const Text("GAME FINISHED"),
+        content: Text(message),
         actions: <Widget>[
           TextButton(
             style: TextButton.styleFrom(
@@ -38,6 +40,7 @@ class _GameScreenState extends State<GameScreen> {
             ),
             child: const Text('Go to Menu'),
             onPressed: () {
+              Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             },
           ),
@@ -47,6 +50,7 @@ class _GameScreenState extends State<GameScreen> {
             ),
             child: const Text('Restart'),
             onPressed: () {
+              Navigator.of(context).pop();
               Navigator.of(context).pushReplacementNamed(GameScreen.routeName);
             },
           ),
@@ -96,18 +100,30 @@ class _GameScreenState extends State<GameScreen> {
     return false;
   }
 
+  // Check for a tie game
+  bool checkTieGame() {
+    return !gameBoard.contains('');
+  }
+
   // Handle button press
   void handleButtonPress(int index) {
-    setState(() {
-      gameBoard[index] = playerTurn;
-    });
+    if (gameOver) return;
+    if (gameBoard[index] == "") {
+      // if the button has no character yet then you can place
+      setState(() {
+        gameBoard[index] = playerTurn;
+      });
 
-    // Check for winning condition
-    if (checkHorizontalWin() || checkVerticalWin() || checkDiagonalWin()) {
-      showFinalDialog(context);
-    } else {
-      // Switch player's turn
-      playerTurn = (playerTurn == "X") ? "O" : "X";
+      // Check for winning condition
+      if (checkHorizontalWin() || checkVerticalWin() || checkDiagonalWin()) {
+        gameOver = true;
+        showFinalDialog(context, "THE WINNER IS PLAYER: $playerTurn");
+      } else if (checkTieGame()) {
+        showFinalDialog(context, "It's a Tie!");
+      } else {
+        // Switch player's turn
+        playerTurn = (playerTurn == "X") ? "O" : "X";
+      }
     }
   }
 
@@ -140,12 +156,25 @@ class _GameScreenState extends State<GameScreen> {
             const SizedBox(height: 16),
             Text("TURN: $playerTurn"),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Handle Quit button tap
-                // Implement logic for quitting the game
-              },
-              child: const Text("Quit"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context)
+                      .pushReplacementNamed(HomeScreen.routeName),
+                  child: const Text("Quit"),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('Restart'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(GameScreen.routeName);
+                  },
+                ),
+              ],
             ),
           ],
         ),
