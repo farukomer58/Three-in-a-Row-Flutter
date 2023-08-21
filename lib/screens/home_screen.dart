@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:three_in_a_row/screens/game_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routeName = "/home";
+
   const HomeScreen({super.key});
 
   @override
@@ -13,7 +15,8 @@ class HomeScreen extends StatelessWidget {
           Container(
             color: Colors.red,
             child: const Padding(
-              padding: EdgeInsets.only(top:100.0), // Adjust the top padding as needed
+              padding: EdgeInsets.only(top: 100.0),
+              // Adjust the top padding as needed
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Text(
@@ -35,7 +38,8 @@ class HomeScreen extends StatelessWidget {
                   ElevatedButton(
                     child: const Text("Start Game"),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, GameScreen.routeName);
+                      Navigator.pushReplacementNamed(
+                          context, GameScreen.routeName);
                     },
                   ),
                 ],
